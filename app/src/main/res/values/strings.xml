@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name" translatable="false">AwesomeWallpaper</string>
+    <string name="love" translatable="false">Love</string>
+    <string name="juice" translatable="false">Juice</string>
+    <string name="music" translatable="false">Music</string>
+    <string name="all" translatable="false">All</string>
+    <string name="ocean" translatable="false">Ocean</string>
+    <string name="flowers" translatable="false">Flowers</string>
+    <string name="cake" translatable="false">Cake</string>
+    <string name="nature" translatable="false">Nature</string>
+    <string name="animal" translatable="false">Animal</string>
+    <string name="birds" translatable="false">Birds</string>
+    <string name="wild" translatable="false">Wild</string>
+    <string name="cool" translatable="false">Cool</string>
+    <string name="watch" translatable="false">Watch</string>
+    <string name="car" translatable="false">Car</string>
+    <string name="bike" translatable="false">Bike</string>
+</resources>
