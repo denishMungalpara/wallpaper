@@ -15,4 +15,8 @@
     <string name="watch" translatable="false">Watch</string>
     <string name="car" translatable="false">Car</string>
     <string name="bike" translatable="false">Bike</string>
+    <string name="set_wallpaper">Set Wallpaper</string>
+    <string name="download_image">Download Image</string>
+    <string name="back">Back</string>
+    <string name="share">Share</string>
 </resources>

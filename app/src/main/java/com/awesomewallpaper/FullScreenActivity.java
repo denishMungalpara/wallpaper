@@ -1,12 +1,16 @@
 package com.awesomewallpaper;
 
 import android.app.WallpaperManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -31,6 +35,8 @@ public class FullScreenActivity extends AppCompatActivity {
     private Button btnSetWallpaper, btnDownloadImage;
     private String imageUrl;
     private static final int STORAGE_PERMISSION_CODE = 100;
+    private ImageView goBackButton;
+    private ImageView shareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,8 @@ public class FullScreenActivity extends AppCompatActivity {
         fullScreenImageView = findViewById(R.id.fullscreen_image);
         btnSetWallpaper = findViewById(R.id.btn_set_wallpaper);
         btnDownloadImage = findViewById(R.id.btn_download_image);
+        goBackButton = findViewById(R.id.go_back_button);
+        shareButton = findViewById(R.id.share_button);
 
         // Get the image URL passed from MainActivity
         imageUrl = getIntent().getStringExtra("image_url");
@@ -53,6 +61,10 @@ public class FullScreenActivity extends AppCompatActivity {
         // Set click listeners for buttons
         btnSetWallpaper.setOnClickListener(v -> SetWallpaperEvent());
         btnDownloadImage.setOnClickListener(v -> downloadImage());
+        // Go Back Button Functionality
+        goBackButton.setOnClickListener(v -> onBackPressed());
+        // Share Button Functionality
+        shareButton.setOnClickListener(v -> shareImage());
     }
     public void SetWallpaperEvent() {
 
@@ -93,6 +105,64 @@ public class FullScreenActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(FullScreenActivity.this, "Failed to set wallpaper.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // Method to share the image URL
+    private void shareImage() {
+        // Create an Intent to share the image URL
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, imageUrl);  // Share the image URL
+
+        // Start the sharing intent
+        startActivity(Intent.createChooser(shareIntent, "Share Image URL"));
+    }
+
+    // Method to share the image
+    private void shareImages() {
+        // Get the bitmap from the ImageView
+        Bitmap bitmap = ((BitmapDrawable) fullScreenImageView.getDrawable()).getBitmap();
+
+        // Save the bitmap to external storage
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Downloaded_Wallpapers");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        // Save the file with a unique name
+        File file = new File(storageDir, "shared_wallpaper_" + System.currentTimeMillis() + ".jpg");
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            // Use MediaScannerConnection to scan the file and make it appear in the gallery
+            MediaScannerConnection.scanFile(this,
+                    new String[]{file.getAbsolutePath()},
+                    null,
+                    (path, uri) -> {
+                        // Intent to share the image
+                        Uri uriForShare = Uri.fromFile(file);
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("image/jpeg");
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, uriForShare);
+                        startActivity(Intent.createChooser(shareIntent, "Share Image"));
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to share image.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void copyImageUrlToClipboard() {
+        // Copy URL to clipboard
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Image URL", imageUrl);
+        clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(this, "Image URL copied to clipboard", Toast.LENGTH_SHORT).show();
     }
 
     // Check and request storage permissions
