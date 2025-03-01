@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">AwesomeWallpaper</string>
+    <string name="app_name_header" translatable="false">Awesome Wallpaper</string>
     <string name="love" translatable="false">Love</string>
     <string name="juice" translatable="false">Juice</string>
     <string name="music" translatable="false">Music</string>
@@ -19,4 +20,5 @@
     <string name="download_image">Download Image</string>
     <string name="back">Back</string>
     <string name="share">Share</string>
+    <string name="no_wallpapers_available">No Wallpapers Available</string>
 </resources>
