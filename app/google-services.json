@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922424343533",
+    "project_id": "awesomewallpaper-3d624",
+    "storage_bucket": "awesomewallpaper-3d624.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922424343533:android:6b239c79bea4ad981605e4",
+        "android_client_info": {
+          "package_name": "com.awesomewallpaper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9jApPPDHFKVVWPERib40906lIEbkYass"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
