@@ -37,7 +37,18 @@
             android:name=".MainActivity"
             android:exported="true">
         </activity>
-
+        <!-- SignupActivity -->
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="true"
+            android:label="Sign Up Screen">
+        </activity>
+        <!-- LoginActivity -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:label="Login Screen">
+        </activity>
 
     </application>
 

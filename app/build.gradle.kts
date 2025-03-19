@@ -41,6 +41,8 @@ dependencies {
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-database:20.0.0")  // Firebase Database
     // when using to authentication
     implementation ("com.google.firebase:firebase-auth:22.3.0")
 
