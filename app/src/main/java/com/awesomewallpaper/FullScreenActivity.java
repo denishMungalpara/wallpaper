@@ -3,7 +3,6 @@ package com.awesomewallpaper;
 import android.app.WallpaperManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -66,7 +64,7 @@ public class FullScreenActivity extends AppCompatActivity {
         // Share Button Functionality
         shareButton.setOnClickListener(v -> shareImage());
     }
-    public void SetWallpaperEvent() {
+    public void SetWallpaperEvents() {
 
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
         Bitmap bitmap  = ((BitmapDrawable)fullScreenImageView.getDrawable()).getBitmap();
@@ -77,6 +75,56 @@ public class FullScreenActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    public void SetWallpaperEvent() {
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        Bitmap originalBitmap = ((BitmapDrawable) fullScreenImageView.getDrawable()).getBitmap();
+
+        int desiredWidth = wallpaperManager.getDesiredMinimumWidth();
+        int desiredHeight = wallpaperManager.getDesiredMinimumHeight();
+
+        // Create centered wallpaper based on orientation
+        Bitmap finalWallpaper = createCenteredBitmap(originalBitmap, desiredWidth, desiredHeight);
+
+        try {
+            wallpaperManager.setBitmap(finalWallpaper);
+            Toast.makeText(this, "Wallpaper Set", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to set wallpaper.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Bitmap createCenteredBitmap(Bitmap source, int desiredWidth, int desiredHeight) {
+        int srcWidth = source.getWidth();
+        int srcHeight = source.getHeight();
+
+        // Check if image is portrait or landscape
+        boolean isPortrait = srcHeight > srcWidth;
+
+        float scale;
+        if (isPortrait) {
+            // Scale based on height
+            scale = (float) desiredHeight / srcHeight;
+        } else {
+            // Scale based on width
+            scale = (float) desiredWidth / srcWidth;
+        }
+
+        int scaledWidth = Math.round(srcWidth * scale);
+        int scaledHeight = Math.round(srcHeight * scale);
+
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true);
+
+        // Center crop
+        int xOffset = Math.max((scaledWidth - desiredWidth) / 2, 0);
+        int yOffset = Math.max((scaledHeight - desiredHeight) / 2, 0);
+
+        return Bitmap.createBitmap(scaledBitmap, xOffset, yOffset,
+                Math.min(desiredWidth, scaledWidth),
+                Math.min(desiredHeight, scaledHeight));
+    }
+
     // Method to set the image as wallpaper
     private void setWallpaper() {
         try {
