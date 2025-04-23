@@ -7,18 +7,38 @@
     android:background="@color/black"
     android:id="@+id/lay">
 
-    <!-- App Name (Header) -->
-    <TextView
-        android:id="@+id/appNameTextView"
+    <!-- App Name and Logout Button Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name_header"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="8dp"
         android:layout_margin="8dp"
-        android:background="@drawable/border_3d"/>
+        android:background="@drawable/border_3d"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/appNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:text="@string/app_name_header"
+            android:textSize="20sp"
+            android:paddingStart="40dp"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_logout"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_logout"
+            android:scaleType="centerInside"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:contentDescription="@string/logout"
+            app:tint="@color/white" />
+    </LinearLayout>
 
     <!-- Search Bar -->
     <androidx.appcompat.widget.SearchView

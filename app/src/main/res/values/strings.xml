@@ -28,4 +28,5 @@
     <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign up</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="already_have_an_account_log_in">Already have an account? Log in</string>
+    <string name="logout">Logout</string>
 </resources>

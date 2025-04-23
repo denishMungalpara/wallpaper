@@ -1,6 +1,8 @@
 package com.awesomewallpaper;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -8,9 +10,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -28,6 +33,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView noWallpapersText;
 
     Button btn_all,btn_cake,btn_nature, btn_bike, btn_car, btn_ocean, btn_flowers, btn_animal, btn_birds, btn_wild, btn_cool, btn_love, btn_juice, btn_music, btn_watch;
-
+    ImageButton btn_logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_juice = findViewById(R.id.btn_juice);
         btn_music = findViewById(R.id.btn_music);
         btn_watch = findViewById(R.id.btn_watch);
+        btn_logout = findViewById(R.id.btn_logout);
 
         // Set click listeners
         btn_bike.setOnClickListener(this);
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_juice.setOnClickListener(this);
         btn_music.setOnClickListener(this);
         btn_watch.setOnClickListener(this);
+        btn_logout.setOnClickListener(this);
 
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
@@ -121,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // When user submits the query, clear previous wallpapers and fetch new ones
                 Url1 = "https://api.pexels.com/v1/search/?page=" + pageNumber + "&per_page=80&query=" + query;
                 wallpaperModelList.clear();  // Clear existing wallpapers
+                searchView.clearFocus();
                 fetchWallpaper();  // Fetch new wallpapers based on search
                 hideKeyboard();  // Hide keyboard after submit
                 return true;
@@ -250,6 +260,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             wallpaperModelList.clear();
             fetchWallpaper();
         }
+        if (v.getId() == R.id.btn_logout) {
+            showLogoutConfirmation();
+            return;
+        }
+    }
+
+    //    to show conformation model
+    private void showLogoutConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        builder.setTitle("Logout");
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            FirebaseAuth.getInstance().signOut();
+            // Clear userId from SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("userId"); // Remove specific key
+            editor.apply(); // Or use .commit()
+            // Show toast and redirect to login
+            Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     // Method to hide the keyboard
